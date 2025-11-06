@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: freelapay
+      POSTGRES_PASSWORD: freelapay_dev
+      POSTGRES_DB: freelapay
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U freelapay"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://freelapay:freelapay_dev@postgres:5432/freelapay
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: development
+      ALCHEMY_API_KEY: ${ALCHEMY_API_KEY:-your-alchemy-api-key}
+      COINDCX_API_KEY: ${COINDCX_API_KEY:-your-coindcx-api-key}
+      COINDCX_API_SECRET: ${COINDCX_API_SECRET:-your-coindcx-api-secret}
+      CASHFREE_CLIENT_ID: ${CASHFREE_CLIENT_ID:-your-cashfree-client-id}
+      CASHFREE_CLIENT_SECRET: ${CASHFREE_CLIENT_SECRET:-your-cashfree-client-secret}
+      ADMIN_SECRET: ${ADMIN_SECRET:-your-admin-secret-key}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-your-32-char-encryption-key-here}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      DATABASE_URL: postgresql://freelapay:freelapay_dev@postgres:5432/freelapay
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: development
+      COINDCX_API_KEY: ${COINDCX_API_KEY:-your-coindcx-api-key}
+      COINDCX_API_SECRET: ${COINDCX_API_SECRET:-your-coindcx-api-secret}
+      CASHFREE_CLIENT_ID: ${CASHFREE_CLIENT_ID:-your-cashfree-client-id}
+      CASHFREE_CLIENT_SECRET: ${CASHFREE_CLIENT_SECRET:-your-cashfree-client-secret}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:

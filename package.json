@@ -1,0 +1,44 @@
+{
+  "name": "freelapay",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@vercel/analytics": "latest",
+    "bcryptjs": "latest",
+    "bullmq": "latest",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "crypto": "latest",
+    "ethers": "latest",
+    "jsonwebtoken": "latest",
+    "lucide-react": "^0.454.0",
+    "next": "^15.0.0",
+    "pg": "latest",
+    "pg-native": "latest",
+    "qrcode.react": "latest",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "redis": "latest",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss": "^4.1.9",
+    "tailwindcss-animate": "^1.0.7",
+    "tw-animate-css": "latest",
+    "uuid": "latest"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^22",
+    "@types/pg": "^8.10.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "postcss": "^8.5",
+    "typescript": "^5"
+  }
+}
