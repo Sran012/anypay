@@ -1,4 +1,4 @@
-# FreelaPay - Crypto to INR Payout Platform
+# anypay - Crypto to INR Payout Platform
 
 A full-stack MVP for accepting crypto payments and converting them to INR payouts.
 
